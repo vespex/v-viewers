@@ -5,9 +5,13 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
+    "lib": "vue-cli-service build --target lib --name v-viewers --dest ./packages/lib ./packages/index.js",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@aym/buss-ui": "^0.1.4",
+    "hammerjs": "^2.0.8",
+    "postcss-plugin-px2rem": "^0.8.1",
     "vue": "^2.5.17",
     "vue-router": "^3.0.1"
   },
