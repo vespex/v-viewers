@@ -1,6 +1,6 @@
 <template>
   <div class="v-viewer" v-show="isShow">
-    <div class="v-viewer-options needsclick" v-if="hasOpts"  ref="opts">
+    <div class="v-viewer-options" v-if="hasOpts"  ref="opts">
       <a href="javascript:;" class="v-viewer-btn" data-event="reset">还原</a>
       <a href="javascript:;" class="v-viewer-btn" data-event="bigger">放大</a>
       <a href="javascript:;" class="v-viewer-btn" data-event="smaller">缩小</a>
@@ -83,8 +83,9 @@ export default {
     const Pan = new Hammer.Pan()
     const Pinch = new Hammer.Pinch()
     const Tap = new Hammer.Tap()
+    const TapOpts = new Hammer.Tap()
     mc.add([Tap, Pan, Pinch]);
-    opts.add([Tap]);
+    opts.add([TapOpts]);
     mc.on('panstart', this.panStart)
     mc.on('panmove', this.panMove)
     mc.on('panend', this.panEnd)
