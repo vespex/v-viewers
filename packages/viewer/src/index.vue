@@ -6,7 +6,7 @@
       <a href="javascript:;" class="v-viewer-btn" data-event="smaller">缩小</a>
       <a href="javascript:;" class="v-viewer-btn" data-event="close">关闭</a>
     </div>
-    <div class="v-viewer-content needsclick" ref="viewer">
+    <div class="v-viewer-content" ref="viewer">
       <div class="v-viewer-wrap" :style="{width: `${width * images.length}px`, transform: `translateX(${move}px)`}" :class="moving ? '' : 'transition'">
         <div class="v-viewer-images" :style="{width: `${width}px`}" :key="index" v-for="(img, index) in images">
           <img class="v-viewer-img" :src="img">
@@ -96,6 +96,7 @@ export default {
   },
   methods: {
     optsTap (e) {
+      e.preventDefault()
       e.target.dataset.event && this[e.target.dataset.event]()
     },
     stopBody (e) {
@@ -176,21 +177,18 @@ export default {
       this.setTransform()
     },
     open(index = 0) {
-      document.body.addEventListener('touchstart', this.stopBody)
+      document.body.addEventListener('touchstart', this.stopBody, false)
       this.imgs = this.$refs.viewer.getElementsByClassName('v-viewer-img')
       for (let i = 0; i < this.imgs.length; i++) {
-        if (this.width / this.height > this.imgs[i].width / this.imgs[i].height) {
-          this.imgs[i].style.maxHeight = this.height + 'px'
-        } else {
           this.imgs[i].style.maxWidth = this.width + 'px'
-        }
+          this.imgs[i].style.maxHeight = this.height + 'px'
       }
       this.setIndex(index)
       this.move = -index * this.width
       this.isShow = true
     },
     close() {
-      document.body.removeEventListener('touchstart', this.stopBody)
+      document.body.removeEventListener('touchstart', this.stopBody, false)
       this.reset()
       this.isShow = false
     },
