@@ -1,6 +1,6 @@
 <template>
   <div class="v-viewer" v-show="isShow">
-    <div class="v-viewer-options" v-if="hasOpts"  ref="opts">
+    <div class="v-viewer-options" v-if="hasOpts" @click="optsTap">
       <a href="javascript:;" class="v-viewer-btn" data-event="reset">还原</a>
       <a href="javascript:;" class="v-viewer-btn" data-event="bigger">放大</a>
       <a href="javascript:;" class="v-viewer-btn" data-event="smaller">缩小</a>
@@ -9,7 +9,7 @@
     <div class="v-viewer-content" ref="viewer">
       <div class="v-viewer-wrap" :style="{width: `${width * images.length}px`, transform: `translateX(${move}px)`}" :class="moving ? '' : 'transition'">
         <div class="v-viewer-images" :style="{width: `${width}px`}" :key="index" v-for="(img, index) in images">
-          <img class="v-viewer-img" :src="img">
+          <img class="v-viewer-img" :style="{maxWidth: `${width}px`, maxHeight: `${height}px`}" :src="img">
         </div>
       </div>
     </div>
@@ -79,20 +79,16 @@ export default {
   },
   mounted () {
     const mc = new Hammer.Manager(this.$refs.viewer)
-    const opts = new Hammer.Manager(this.$refs.opts)
     const Pan = new Hammer.Pan()
     const Pinch = new Hammer.Pinch()
     const Tap = new Hammer.Tap()
-    const TapOpts = new Hammer.Tap()
     mc.add([Tap, Pan, Pinch]);
-    opts.add([TapOpts]);
     mc.on('panstart', this.panStart)
     mc.on('panmove', this.panMove)
     mc.on('panend', this.panEnd)
     mc.on('pinchstart', this.pinchStart)
     mc.on('pinchmove', this.pinchMove)
     mc.on('tap', this.tap)
-    opts.on('tap', this.optsTap)
   },
   methods: {
     optsTap (e) {
@@ -179,10 +175,6 @@ export default {
     open(index = 0) {
       document.body.addEventListener('touchstart', this.stopBody, false)
       this.imgs = this.$refs.viewer.getElementsByClassName('v-viewer-img')
-      for (let i = 0; i < this.imgs.length; i++) {
-          this.imgs[i].style.maxWidth = this.width + 'px'
-          this.imgs[i].style.maxHeight = this.height + 'px'
-      }
       this.setIndex(index)
       this.move = -index * this.width
       this.isShow = true
